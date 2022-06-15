@@ -1,0 +1,10 @@
+- hosts: localhost
+  tasks:
+    - name: Deploy djangoapp service
+      command: kubectl apply -f djangoapp.yml
+    
+    - name: Horizontal pods autoscale 
+      command: kubectl autoscale deployment djangoapp-cloud --cpu-percent=50 --min=1 --max=10
+
+    - name: Deploy my metrics server
+      command: kubectl apply -f components.yaml

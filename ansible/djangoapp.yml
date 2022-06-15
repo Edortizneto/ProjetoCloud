@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: djangoapp-cloud
+spec:
+    selector:
+        matchLabels:
+            app: djangoapp-cloud
+    template:
+        metadata:
+            labels:
+                app: djangoapp-cloud
+        spec:
+            containers:
+              - name: djangoapp-cloud
+                image: edgardaon/djangoapp-cloud
+                ports:
+                  - containerPort: 8050
+                    name: djangoapp-cloud
+                resources: 
+                    limits:
+                        cpu: 500m
+                    requests:
+                        cpu: 200m 
+---
+apiVersion: v1
+kind: Service
+metadata:
+    name: djangoapp-cloud
+    labels:
+        app: djangoapp-cloud
+spec:
+    type: LoadBalancer
+    ports:
+      - port: 8050
+        targetPort: 8050
+        protocol: TCP
+    selector:
+        app: djangoapp-cloud
